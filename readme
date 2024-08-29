@@ -1,0 +1,16 @@
+cd backend
+npm init  
+npm i express
+npm i mongoose
+npm i dotenv
+npm i bcryptjs
+npm i jsonwebtoken
+npm i cookie-parser
+
+
+node index.js
+
+Object Data Modeling (ODM) : Mongoose Library of MongoDB
+Database : MongoDB Atlas
+Encryption of password : bcryptjs
+postman tool
