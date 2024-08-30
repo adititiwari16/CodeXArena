@@ -6,6 +6,10 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 const cookieParser = require("cookie-parser");
+const cors = require('cors');
+
+// Enable CORS for all origins
+app.use(cors());
 
 dotenv.config()
 
