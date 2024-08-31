@@ -13,7 +13,7 @@ function Home() {
           </p>
           <Link to="/signup">
             <button className="bg-white text-blue-600 px-6 py-3 rounded-full font-semibold text-lg">
-              Get Started
+              About Us
             </button>
           </Link>
         </div>
