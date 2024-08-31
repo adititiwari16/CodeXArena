@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'; // Import Link for routing
 
 const navigation = [
     { name: 'Dashboard', href: '/dashboard', current: false },
-    { name: 'Problems', href: '#problems', current: false },
+    { name: 'Problems', href: '/problems', current: false },
     { name: 'Discussion Forums', href: '#forums', current: false },
     { name: 'Tutorials', href: '#tutorials', current: false },
 ];
