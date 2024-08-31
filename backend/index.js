@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const express = require('express');
 const app = express();
 const {DBConnection} = require('./database/db.js');
@@ -7,11 +8,12 @@ const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 const cookieParser = require("cookie-parser");
 const cors = require('cors');
+const Problem = require('./models/problems.js');
 
 // Enable CORS for all origins
 app.use(cors({
   origin: 'http://localhost:5173', // Frontend URL
-  methods: ['GET', 'POST'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true // Allow cookies to be sent
 }));
 
@@ -29,7 +31,6 @@ app.get("/", (req, res)=>{
 app.get("/home", (req, res)=>{
     res.send("welcome to home");
 })
-
 
 app.post("/register", async (req, res) => {
     console.log('Received registration data:', req.body);
@@ -74,7 +75,6 @@ app.post("/register", async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 });
-
 
 app.post("/signin", async (req, res) => {
     try {
@@ -122,7 +122,97 @@ app.post("/signin", async (req, res) => {
     
 });
 
+// Create a new problem
+app.post('/problems', async (req, res) => {
+    const { problem_id, name, difficulty, topic, description, sample_input, sample_output, constraints } = req.body;
+    
+    if (!problem_id || !name || !difficulty || !topic || !description || !sample_input || !sample_output || !constraints) {
+      return res.status(400).json({ error: 'All fields are required' });
+    }
+  
+    try {
+      const newProblem = new Problem({
+        problem_id,
+        name,
+        difficulty,
+        topic,
+        description,
+        sample_input,
+        sample_output,
+        constraints,
+      });
+  
+      await newProblem.save();
+      res.status(201).json(newProblem);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to create problem' });
+    }
+  });
+  
 
+// Get all problems
+app.get('/problems', async (req, res) => {
+  try {
+    const problems = await Problem.find();
+    res.status(200).json(problems);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get a specific problem
+app.get('/problems/:problem_id', async (req, res) => {
+  const { problem_id } = req.params;
+  try {
+    const problem = await Problem.findOne({ problem_id });
+    if (!problem) {
+      return res.status(404).json({ error: "Problem not found" });
+    }
+    res.status(200).json(problem);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Update a problem
+app.put('/problems/:id', async (req, res) => {
+    const { id } = req.params;
+    const { name, difficulty, topic, description, sample_input, sample_output, constraints } = req.body;
+  
+    try {
+      const updatedProblem = await Problem.findOneAndUpdate(
+        { problem_id: id },
+        { name, difficulty, topic, description, sample_input, sample_output, constraints },
+        { new: true }
+      );
+  
+      if (!updatedProblem) {
+        return res.status(404).json({ error: 'Problem not found' });
+      }
+  
+      res.status(200).json(updatedProblem);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to update problem' });
+    }
+  });
+  
+// Delete a problem
+app.delete('/problems/:problem_id', async (req, res) => {
+  const { problem_id } = req.params;
+
+  try {
+    const problem = await Problem.findOneAndDelete({ problem_id });
+    if (!problem) {
+      return res.status(404).json({ error: "Problem not found" });
+    }
+
+    res.status(200).json({ message: "Problem deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+  
 app.listen(8000, ()=>{
     console.log("server is listening on port 8000");
 })

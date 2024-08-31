@@ -5,7 +5,7 @@ import Login from './pages/login';
 import Signup from './pages/register';
 import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
-import Problems from './pages/problems';
+import Problems from './pages/problems'; 
 import PrivateRoute from './routes/PrivateRoute';
 
 function App() {
@@ -23,6 +23,7 @@ function App() {
               <Problems />
             </PrivateRoute>
           } />
+          <Route path="/problems" element={<Problems />}/>
         </Routes>
       </div>
     </Router>
