@@ -1,22 +1,24 @@
 import React, { useState } from 'react';
-import { loginUser } from '../api_services/api'; // Adjust the path if necessary
+import { useNavigate } from 'react-router-dom'; // Import the useNavigate hook
+import { loginUser } from '../api_services/api'; 
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const navigate = useNavigate(); // Initialize the navigate function
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await loginUser({ email, password });
-      localStorage.setItem('token', response.token); // Assuming token is returned
+      localStorage.setItem('token', response.token);
       setSuccess('Login successful!');
       setEmail('');
       setPassword('');
       setError('');
-      // Redirect to dashboard or home page
+      navigate('/dashboard'); // Redirect to dashboard or home page
     } catch (error) {
       setError('Login failed. Please try again.');
     }
