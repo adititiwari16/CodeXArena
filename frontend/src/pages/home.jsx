@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom'; // Import Link for navigation
 
 function Home() {
   return (
@@ -10,9 +11,11 @@ function Home() {
           <p className="text-lg md:text-xl mb-6">
             Your ultimate platform for coding challenges and learning.
           </p>
-          <button className="bg-white text-blue-600 px-6 py-3 rounded-full font-semibold text-lg">
-            Get Started
-          </button>
+          <Link to="/signup">
+            <button className="bg-white text-blue-600 px-6 py-3 rounded-full font-semibold text-lg">
+              Get Started
+            </button>
+          </Link>
         </div>
       </section>
 
@@ -50,9 +53,11 @@ function Home() {
           <p className="text-lg md:text-xl mb-6">
             Join CodeX Arena today and start your coding journey.
           </p>
-          <button className="bg-white text-blue-600 px-6 py-3 rounded-full font-semibold text-lg">
-            Sign Up
-          </button>
+          <Link to="/signup">
+            <button className="bg-white text-blue-600 px-6 py-3 rounded-full font-semibold text-lg">
+              Sign Up
+            </button>
+          </Link>
         </div>
       </section>
     </div>

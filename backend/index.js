@@ -9,7 +9,11 @@ const cookieParser = require("cookie-parser");
 const cors = require('cors');
 
 // Enable CORS for all origins
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:5173', // Frontend URL
+  methods: ['GET', 'POST'],
+  credentials: true // Allow cookies to be sent
+}));
 
 dotenv.config()
 
@@ -28,26 +32,24 @@ app.get("/home", (req, res)=>{
 
 
 app.post("/register", async (req, res) => {
+    console.log('Received registration data:', req.body);
     try {
-        // Get all the data from user input from request body
         const { firstname, lastname, email, password } = req.body;
 
-        // Check if all data exists -> email and password both mentioned
-        if (!(firstname && lastname && email && password)) {
+        if (!firstname || !lastname || !email || !password) {
+            console.error('Validation error: Missing required fields');
             return res.status(400).send("Please enter all the required fields");
         }
 
-        // Check if user already exists
         const existingUser = await User.findOne({ email });
         if (existingUser) {
+            console.error('Validation error: User already exists');
             return res.status(400).send("User already exists!");
         }
 
-        // Encrypt password
         const hashPassword = bcrypt.hashSync(password, 10);
-        console.log(hashPassword);
+        console.log('Hashed password:', hashPassword);
 
-        // Save the user to the database creating an object
         const user = await User.create({
             firstname,
             lastname,
@@ -55,12 +57,12 @@ app.post("/register", async (req, res) => {
             password: hashPassword
         });
 
-        // Generate a JWT token for the user and send it
         const token = jwt.sign({ id: user._id, email }, process.env.SECRET_KEY, {
             expiresIn: "1hr"
         });
         user.token = token;
-        user.password = undefined; // Remove password from the response
+        user.password = undefined;
+
         res.status(201).json({
             message: "You have successfully registered!",
             user,
@@ -68,10 +70,11 @@ app.post("/register", async (req, res) => {
         });
 
     } catch (error) {
-        console.error(error);
+        console.error('Server error:', error.message);
         res.status(500).send("Internal Server Error");
     }
 });
+
 
 app.post("/signin", async (req, res) => {
     try {
@@ -104,7 +107,7 @@ app.post("/signin", async (req, res) => {
         //store cookies
         const options = {
             expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
-            httpOnly: true, //only manipulate by server not by client/user
+            httpOnly: true, 
         };
 
         //send the token
