@@ -26,11 +26,10 @@ const Problems = () => {
         difficulty: '',
         topic: '',
         description: '',
-        sample_input: '',
-        sample_output: '',
+        sample_input: '',  // Updated
+        sample_output: '',  // Updated
         constraints: '',
     });
-
 
     useEffect(() => {
         const fetchProblems = async () => {
@@ -52,7 +51,6 @@ const Problems = () => {
         setIsViewModalOpen(true);
     };
     const handleCloseViewModal = () => setIsViewModalOpen(false);
-
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -175,7 +173,7 @@ const Problems = () => {
                     required
                 />
                 <textarea
-                    name="sample_input" // Updated
+                    name="sample_input"  // Updated
                     placeholder="Sample Input"
                     value={formData.sample_input}  // Updated
                     onChange={handleInputChange}
@@ -183,7 +181,7 @@ const Problems = () => {
                     required
                 />
                 <textarea
-                    name="sample_output" // Updated
+                    name="sample_output"  // Updated
                     placeholder="Sample Output"
                     value={formData.sample_output}  // Updated
                     onChange={handleInputChange}
@@ -220,10 +218,13 @@ const Problems = () => {
                     style={customStyles}
                 >
                     <h2 className="text-2xl font-bold mb-4">View Problem</h2>
+                    <p><strong>ID:</strong> {selectedProblem.problem_id}</p>
                     <p><strong>Name:</strong> {selectedProblem.name}</p>
+                    <p><strong>Difficulty:</strong> {selectedProblem.difficulty}</p>
+                    <p><strong>Topic:</strong> {selectedProblem.topic}</p>
                     <p><strong>Description:</strong> {selectedProblem.description}</p>
-                    <p><strong>Sample Input:</strong> {selectedProblem.sampleInput}</p>
-                    <p><strong>Sample Output:</strong> {selectedProblem.sampleOutput}</p>
+                    <p><strong>Sample Input:</strong> {selectedProblem.sample_input}</p>  {/* Updated */}
+                    <p><strong>Sample Output:</strong> {selectedProblem.sample_output}</p>  {/* Updated */}
                     <p><strong>Constraints:</strong> {selectedProblem.constraints}</p>
                     <button
                         onClick={() => handleDeleteProblem(selectedProblem.problem_id)}
